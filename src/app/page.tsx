@@ -10,6 +10,7 @@ type GameState = "idle" | "playing" | "won" | "timeUp";
 export default function MemoryGamePage() {
   const [cards, setCards] = useState<GameCard[]>([]);
   const [flippedIds, setFlippedIds] = useState<number[]>([]);
+  const [wrongIds, setWrongIds] = useState<number[]>([]);
   const [moves, setMoves] = useState(0);
   const [timeLeft, setTimeLeft] = useState(GAME_TIME_SECONDS);
   const [gameState, setGameState] = useState<GameState>("idle");
@@ -80,7 +81,11 @@ export default function MemoryGamePage() {
       setMoves((prev) => prev + 1);
       disableClick.current = false;
     } else {
-      // No match — flip back after delay
+      // No match — trigger shake & haptic vibration
+      setWrongIds([firstId, secondId]);
+      if (typeof window !== "undefined" && navigator.vibrate) {
+        navigator.vibrate(150);
+      }
       setTimeout(() => {
         setCards((prev) =>
           prev.map((c) =>
@@ -89,6 +94,7 @@ export default function MemoryGamePage() {
               : c,
           ),
         );
+        setWrongIds([]);
         setFlippedIds([]);
         setMoves((prev) => prev + 1);
         disableClick.current = false;
@@ -375,6 +381,7 @@ export default function MemoryGamePage() {
                     onClick={handleCardClick}
                     disabled={disableClick.current}
                     isDark={isDark}
+                    isWrong={wrongIds.includes(card.id)}
                   />
                 ))}
               </div>

@@ -8,9 +8,10 @@ type Props = {
   onClick: (id: number) => void;
   disabled: boolean;
   isDark: boolean;
+  isWrong?: boolean;
 };
 
-export default function Card({ card, onClick, disabled, isDark }: Props) {
+export default function Card({ card, onClick, disabled, isDark, isWrong }: Props) {
   const { id, emoji, label, isFlipped, isMatched } = card;
 
   const cardBackBg = isDark
@@ -41,7 +42,12 @@ export default function Card({ card, onClick, disabled, isDark }: Props) {
         !isFlipped && !isMatched && !disabled ? { scale: 1.06, y: -4 } : {}
       }
       whileTap={!isFlipped && !isMatched && !disabled ? { scale: 0.95 } : {}}
-      transition={{ type: "spring", stiffness: 400, damping: 22 }}
+      animate={isWrong ? { x: [0, -8, 8, -8, 8, -4, 4, 0] } : { x: 0 }}
+      transition={
+        isWrong
+          ? { duration: 0.4 }
+          : { type: "spring", stiffness: 400, damping: 22 }
+      }
       aria-label={isFlipped || isMatched ? label : "Hidden card"}
       role="button"
       tabIndex={0}
