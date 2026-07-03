@@ -4,16 +4,31 @@ export type CardItem = {
   label: string;
 };
 
-// 8 unique pairs → 16 cards total
-export const CARD_ITEMS: Omit<CardItem, "id">[] = [
+export const ALL_CARD_ITEMS: Omit<CardItem, "id">[] = [
   { emoji: "🦊", label: "Fox" },
   { emoji: "🐬", label: "Dolphin" },
   { emoji: "🦋", label: "Butterfly" },
   { emoji: "🐸", label: "Frog" },
+  { emoji: "🦁", label: "Lion" },
+  { emoji: "🐼", label: "Panda" },
+  { emoji: "🦉", label: "Owl" },
+  { emoji: "🐙", label: "Octopus" },
+  { emoji: "🦒", label: "Giraffe" },
+  { emoji: "🐻", label: "Bear" },
+  { emoji: "🐯", label: "Tiger" },
+  { emoji: "🦘", label: "Kangaroo" },
   { emoji: "🍓", label: "Strawberry" },
   { emoji: "🍋", label: "Lemon" },
   { emoji: "🥝", label: "Kiwi" },
   { emoji: "🍇", label: "Grapes" },
+  { emoji: "🍉", label: "Watermelon" },
+  { emoji: "🍊", label: "Orange" },
+  { emoji: "🍌", label: "Banana" },
+  { emoji: "🍑", label: "Peach" },
+  { emoji: "🥭", label: "Mango" },
+  { emoji: "🍍", label: "Pineapple" },
+  { emoji: "🍎", label: "Apple" },
+  { emoji: "🍒", label: "Cherry" },
 ];
 
 export type GameCard = {
@@ -25,15 +40,34 @@ export type GameCard = {
   isMatched: boolean;
 };
 
-export function generateDeck(): GameCard[] {
+function seededRandom(seed: number): () => number {
+  let state = seed;
+  return () => {
+    state = (state * 9301 + 49297) % 233280;
+    return state / 233280;
+  };
+}
+
+export function generateDeck(seed?: number): GameCard[] {
+  const useSeed = seed ?? Date.now();
+  const random = seededRandom(useSeed);
+  
+  const shuffledItems = [...ALL_CARD_ITEMS];
+  for (let i = shuffledItems.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [shuffledItems[i], shuffledItems[j]] = [shuffledItems[j], shuffledItems[i]];
+  }
+  
+  const selectedItems = shuffledItems.slice(0, 8);
+  
   const deck: GameCard[] = [];
-  CARD_ITEMS.forEach((item, index) => {
+  selectedItems.forEach((item, index) => {
     deck.push({ id: index * 2,     pairId: index, ...item, isFlipped: false, isMatched: false });
     deck.push({ id: index * 2 + 1, pairId: index, ...item, isFlipped: false, isMatched: false });
   });
-  // Fisher-Yates shuffle
+  
   for (let i = deck.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [deck[i], deck[j]] = [deck[j], deck[i]];
   }
   return deck;

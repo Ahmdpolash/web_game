@@ -18,7 +18,8 @@ export default function MemoryGamePage() {
 
   // Initialize game
   const startGame = useCallback(() => {
-    setCards(generateDeck());
+    const sessionSeed = Date.now();
+    setCards(generateDeck(sessionSeed));
     setFlippedIds([]);
     setMoves(0);
     setTimeLeft(GAME_TIME_SECONDS);
@@ -471,6 +472,32 @@ export default function MemoryGamePage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <footer
+        style={{
+          position: "fixed",
+          bottom: "0.75rem",
+          left: "50%",
+          transform: "translateX(-50%)",
+          fontSize: "0.75rem",
+          color: isDark ? "#64748b" : "#64748b",
+          zIndex: 999,
+        }}
+      >
+        Developed by{" "}
+        <a
+          href="https://linkedin.com/in/polashahmed"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            color: isDark ? "#3b82f6" : "#4f46e5",
+            textDecoration: "none",
+            fontWeight: 600,
+          }}
+        >
+          Polash
+        </a>
+      </footer>
     </div>
   );
 }
