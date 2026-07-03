@@ -13,33 +13,45 @@ type Props = {
 export default function Card({ card, onClick, disabled, isDark }: Props) {
   const { id, emoji, label, isFlipped, isMatched } = card;
 
-  const cardBackBg = isDark 
-    ? "linear-gradient(135deg, #334155 0%, #1e293b 100%)" 
+  const cardBackBg = isDark
+    ? "linear-gradient(135deg, #334155 0%, #1e293b 100%)"
     : "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)";
-  
+
   const cardFrontBg = isMatched
-    ? isDark 
-      ? "linear-gradient(135deg, #065f46 0%, #047857 100%)" 
+    ? isDark
+      ? "linear-gradient(135deg, #065f46 0%, #047857 100%)"
       : "linear-gradient(135deg, #10b981 0%, #059669 100%)"
-    : isDark 
-      ? "linear-gradient(135deg, #475569 0%, #334155 100%)" 
+    : isDark
+      ? "linear-gradient(135deg, #475569 0%, #334155 100%)"
       : "linear-gradient(135deg, #818cf8 0%, #6366f1 100%)";
-  
+
   const cardBorder = isMatched
-    ? isDark ? "#10b981" : "#10b981"
-    : isDark ? "#64748b" : "#4f46e5";
+    ? isDark
+      ? "#10b981"
+      : "#10b981"
+    : isDark
+      ? "#64748b"
+      : "#4f46e5";
 
   return (
     <motion.div
       className="card-wrapper"
       onClick={() => !disabled && !isFlipped && !isMatched && onClick(id)}
-      whileHover={!isFlipped && !isMatched && !disabled ? { scale: 1.06, y: -4 } : {}}
+      whileHover={
+        !isFlipped && !isMatched && !disabled ? { scale: 1.06, y: -4 } : {}
+      }
       whileTap={!isFlipped && !isMatched && !disabled ? { scale: 0.95 } : {}}
       transition={{ type: "spring", stiffness: 400, damping: 22 }}
       aria-label={isFlipped || isMatched ? label : "Hidden card"}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && !disabled && !isFlipped && !isMatched && onClick(id)}
+      onKeyDown={(e) =>
+        e.key === "Enter" &&
+        !disabled &&
+        !isFlipped &&
+        !isMatched &&
+        onClick(id)
+      }
       style={{
         perspective: "600px",
         cursor: isFlipped || isMatched || disabled ? "default" : "pointer",
@@ -77,11 +89,15 @@ export default function Card({ card, onClick, disabled, isDark }: Props) {
             fontSize: "1.5rem",
           }}
         >
-          <span style={{ 
-            opacity: isDark ? 0.5 : 0.6, 
-            color: isDark ? "#94a3b8" : "#e0e7ff",
-            fontWeight: 700,
-          }}>?</span>
+          <span
+            style={{
+              opacity: isDark ? 0.5 : 0.6,
+              color: isDark ? "#94a3b8" : "#e0e7ff",
+              fontWeight: 700,
+            }}
+          >
+            ?
+          </span>
         </div>
 
         {/* FRONT */}
@@ -96,7 +112,7 @@ export default function Card({ card, onClick, disabled, isDark }: Props) {
             background: cardFrontBg,
             border: `2px solid ${cardBorder}`,
             boxShadow: isMatched
-              ? isDark 
+              ? isDark
                 ? "0 2px 12px rgba(16,185,129,0.4)"
                 : "0 2px 12px rgba(16,185,129,0.5)"
               : isDark
@@ -117,15 +133,15 @@ export default function Card({ card, onClick, disabled, isDark }: Props) {
           >
             {emoji}
           </motion.span>
-          <span style={{
-            fontSize: "0.65rem",
-            color: isMatched
-              ? "#ffffff"
-              : isDark ? "#94a3b8" : "#e0e7ff",
-            fontWeight: 600,
-            letterSpacing: "0.05em",
-            textTransform: "uppercase",
-          }}>
+          <span
+            style={{
+              fontSize: "0.65rem",
+              color: isMatched ? "#ffffff" : isDark ? "#94a3b8" : "#e0e7ff",
+              fontWeight: 600,
+              letterSpacing: "0.05em",
+              textTransform: "uppercase",
+            }}
+          >
             {label}
           </span>
         </div>

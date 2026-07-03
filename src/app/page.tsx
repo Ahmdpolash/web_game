@@ -47,7 +47,11 @@ export default function MemoryGamePage() {
 
   // Check for win
   useEffect(() => {
-    if (gameState === "playing" && cards.length > 0 && cards.every((c) => c.isMatched)) {
+    if (
+      gameState === "playing" &&
+      cards.length > 0 &&
+      cards.every((c) => c.isMatched)
+    ) {
       setGameState("won");
     }
   }, [cards, gameState]);
@@ -67,8 +71,10 @@ export default function MemoryGamePage() {
       // Match found
       setCards((prev) =>
         prev.map((c) =>
-          c.id === firstId || c.id === secondId ? { ...c, isMatched: true, isFlipped: true } : c
-        )
+          c.id === firstId || c.id === secondId
+            ? { ...c, isMatched: true, isFlipped: true }
+            : c,
+        ),
       );
       setFlippedIds([]);
       setMoves((prev) => prev + 1);
@@ -78,8 +84,10 @@ export default function MemoryGamePage() {
       setTimeout(() => {
         setCards((prev) =>
           prev.map((c) =>
-            c.id === firstId || c.id === secondId ? { ...c, isFlipped: false } : c
-          )
+            c.id === firstId || c.id === secondId
+              ? { ...c, isFlipped: false }
+              : c,
+          ),
         );
         setFlippedIds([]);
         setMoves((prev) => prev + 1);
@@ -93,7 +101,7 @@ export default function MemoryGamePage() {
     if (gameState !== "playing") return;
 
     setCards((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, isFlipped: true } : c))
+      prev.map((c) => (c.id === id ? { ...c, isFlipped: true } : c)),
     );
     setFlippedIds((prev) => [...prev, id]);
   };
@@ -151,7 +159,9 @@ export default function MemoryGamePage() {
           justifyContent: "center",
           fontSize: "1.3rem",
           zIndex: 1000,
-          boxShadow: isDark ? "0 2px 8px rgba(0,0,0,0.3)" : "0 2px 8px rgba(0,0,0,0.1)",
+          boxShadow: isDark
+            ? "0 2px 8px rgba(0,0,0,0.3)"
+            : "0 2px 8px rgba(0,0,0,0.1)",
           transition: "all 0.2s",
         }}
         aria-label="Toggle theme"
@@ -225,7 +235,11 @@ export default function MemoryGamePage() {
                 <li>1. Click on each card to flip it</li>
                 <li>2. Remember the position of each emoji</li>
                 <li>3. Match all pairs before time runs out</li>
-                <li>4. You have <strong style={{ color: theme.accent }}>5 minutes</strong> to complete</li>
+                <li>
+                  4. You have{" "}
+                  <strong style={{ color: theme.accent }}>5 minutes</strong> to
+                  complete
+                </li>
               </ul>
             </div>
             <motion.button
@@ -426,7 +440,13 @@ export default function MemoryGamePage() {
             >
               {gameState === "won" ? "You Won!" : "Time's Up!"}
             </h2>
-            <p style={{ fontSize: "0.9rem", color: theme.textMuted, marginBottom: "1.25rem" }}>
+            <p
+              style={{
+                fontSize: "0.9rem",
+                color: theme.textMuted,
+                marginBottom: "1.25rem",
+              }}
+            >
               {gameState === "won"
                 ? `Congratulations! You matched all pairs in ${moves} moves.`
                 : "Better luck next time! Try again to beat the clock."}

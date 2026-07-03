@@ -32,8 +32,8 @@ export const ALL_CARD_ITEMS: Omit<CardItem, "id">[] = [
 ];
 
 export type GameCard = {
-  id: number;        // unique instance id
-  pairId: number;    // shared between the two matching cards
+  id: number; // unique instance id
+  pairId: number; // shared between the two matching cards
   emoji: string;
   label: string;
   isFlipped: boolean;
@@ -51,21 +51,33 @@ function seededRandom(seed: number): () => number {
 export function generateDeck(seed?: number): GameCard[] {
   const useSeed = seed ?? Date.now();
   const random = seededRandom(useSeed);
-  
+
   const shuffledItems = [...ALL_CARD_ITEMS];
   for (let i = shuffledItems.length - 1; i > 0; i--) {
     const j = Math.floor(random() * (i + 1));
     [shuffledItems[i], shuffledItems[j]] = [shuffledItems[j], shuffledItems[i]];
   }
-  
+
   const selectedItems = shuffledItems.slice(0, 8);
-  
+
   const deck: GameCard[] = [];
   selectedItems.forEach((item, index) => {
-    deck.push({ id: index * 2,     pairId: index, ...item, isFlipped: false, isMatched: false });
-    deck.push({ id: index * 2 + 1, pairId: index, ...item, isFlipped: false, isMatched: false });
+    deck.push({
+      id: index * 2,
+      pairId: index,
+      ...item,
+      isFlipped: false,
+      isMatched: false,
+    });
+    deck.push({
+      id: index * 2 + 1,
+      pairId: index,
+      ...item,
+      isFlipped: false,
+      isMatched: false,
+    });
   });
-  
+
   for (let i = deck.length - 1; i > 0; i--) {
     const j = Math.floor(random() * (i + 1));
     [deck[i], deck[j]] = [deck[j], deck[i]];
