@@ -53,7 +53,7 @@ export default function Card({ card, onClick, disabled, isDark }: Props) {
         onClick(id)
       }
       style={{
-        perspective: "600px",
+        perspective: "1000px",
         cursor: isFlipped || isMatched || disabled ? "default" : "pointer",
         width: "100%",
         aspectRatio: "1",
@@ -62,12 +62,18 @@ export default function Card({ card, onClick, disabled, isDark }: Props) {
       {/* flip container */}
       <motion.div
         animate={{ rotateY: isFlipped || isMatched ? 180 : 0 }}
-        transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+        transition={{ 
+          type: "spring",
+          stiffness: 130,
+          damping: 16,
+          mass: 0.8
+        }}
         style={{
           width: "100%",
           height: "100%",
           position: "relative",
           transformStyle: "preserve-3d",
+          willChange: "transform",
         }}
       >
         {/* BACK */}
