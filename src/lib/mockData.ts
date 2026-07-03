@@ -48,6 +48,27 @@ function seededRandom(seed: number): () => number {
   };
 }
 
+function hasAdjacentPairs(deck: GameCard[]): boolean {
+  for (let i = 0; i < deck.length; i++) {
+    const row = Math.floor(i / 4);
+    const col = i % 4;
+
+    // Check right neighbor
+    if (col < 3) {
+      if (deck[i].pairId === deck[i + 1].pairId) {
+        return true;
+      }
+    }
+    // Check bottom neighbor
+    if (row < 3) {
+      if (deck[i].pairId === deck[i + 4].pairId) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 export function generateDeck(seed?: number): GameCard[] {
   const useSeed = seed ?? Date.now();
   const random = seededRandom(useSeed);
@@ -78,10 +99,16 @@ export function generateDeck(seed?: number): GameCard[] {
     });
   });
 
-  for (let i = deck.length - 1; i > 0; i--) {
-    const j = Math.floor(random() * (i + 1));
-    [deck[i], deck[j]] = [deck[j], deck[i]];
-  }
+  // Shuffle until there are no adjacent identical cards
+  let attempts = 0;
+  do {
+    for (let i = deck.length - 1; i > 0; i--) {
+      const j = Math.floor(random() * (i + 1));
+      [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
+    attempts++;
+  } while (hasAdjacentPairs(deck) && attempts < 200);
+
   return deck;
 }
 
